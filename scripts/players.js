@@ -22,5 +22,9 @@ $(players).each(function(i) {
   codesSounds[codes[i]] = sounds[i]
 })
 
-buzzDisplay = '<div class="row" data-keystroke="thekey"> <h1>name</h1><audio src="/media/noise"></audio></div>'
-playerDisplay = '<div class="col-md-1" data-keystroke="thekey">name<br><span class="score">0</span></div>'
+buzzDisplay = '<div class="row" data-keystroke="thekey"><div class="col-md-12"><h1>name</h1><audio src="/media/noise"></audio></div></div>'
+playerDisplay = '<td data-keystroke="thekey">name<br><span class="score">0</span></td>'
+
+showPlayer = function showPlayers(where, key, name) {
+  $(where).append(playerDisplay.replace('thekey', key).replace('name', name))
+}

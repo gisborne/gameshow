@@ -1,5 +1,5 @@
 var client = new Faye.Client('http://localhost:9292/')
-var subscription = client.subscribe('/msg', function(message) {
+var subscription = client.subscribe('/score', function(message) {
   eval(message)
 })
 
@@ -22,17 +22,26 @@ $(document).keydown(function(evt) {
           }, lockTime * 1000)
       playerDivs.hide()
       playerDiv.show()
-      playerDiv.children('audio')[0].play()
+      playerDiv.find('audio')[0].play()
     }
   }
 })
 
 j = $('.jumbotron')
+body = $('#scores table tr')
 $(function() {
   $(codes).each(function(i, c) {
     $('.jumbotron').append(buzzDisplay.replace('thekey', c).replace('name', players[i]).replace('noise', sounds[i]))
-    $('.body').append(playerDisplay.replace('thekey', c).replace('name', players[i]))
+    showPlayer(body, c, players[i])
+
   })
 
   playerDivs = $('.jumbotron .row')
 })
+
+function update(ks, amt) {
+  console.log("update " + ks + " with " + amt)
+  var elt = $('[data-keystroke=' + ks +"] span")
+  var current = Number(elt.html())
+  elt.html(current + amt)
+}

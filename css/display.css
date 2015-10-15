@@ -4,3 +4,10 @@ div.row[data-keystroke] {
 div.jumbotron {
     min-height: 200px;
 }
+table {
+    width: 100%;
+}
+img.half {
+    height: 50%;
+    width: auto%;
+}
