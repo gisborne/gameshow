@@ -1,8 +1,5 @@
-div.row[data-keystroke] {
+div[data-keystroke] {
     display: none;
-}
-div.jumbotron {
-    min-height: 200px;
 }
 table {
     width: 100%;
@@ -10,4 +7,33 @@ table {
 img.half {
     height: 50%;
     width: auto;
+}
+
+.buzzers {
+    top: 20%;
+    left: 20%;
+    color: white;
+    min-width: 800px;
+    z-index: 100;
+    position: absolute;
+    border-radius: 30px;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-name: flashy;
+}
+
+@keyframes flashy {
+    from {background: pink;}
+    to {background: red;}
+}
+
+.buzzers div {
+    text-align: center;
+}
+
+h1 {
+    font-size: 100pt;
+}
+td {
+    font-size: 50pt;
 }

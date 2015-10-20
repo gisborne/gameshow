@@ -1,10 +1,10 @@
-var client = new Faye.Client('http://localhost:9292/')
+var client = new Faye.Client('http://192.168.8.188:9292/')
 //$('#foo-submit').click(function() {
 //  client.publish('/msg', $('#foo').val())
 //})
 body = $('#scores table tr')
-$(codes).each(function(i, c) {
-  showPlayer(body, c, players[i])
+$(players).each(function(i, p) {
+  showPlayer(body, codes[i], p)
 })
 
 $('[data-keystroke]').each(function(i, playerDisplay) {
