@@ -1,16 +1,14 @@
-var client = new Faye.Client('http://192.168.8.188:9292/')
-var subscription = client.subscribe('/score', function(message) {
-  eval(message)
-})
-
 var lockTime = 3 //Time in seconds after a key is received where we don't accept others
 var locked = false
 
+buzzDisplay = '<div data-keystroke="thekey"><h1>name</h1><audio src="/media/noise"></audio></div>'
+
 function buzz(code) {
+  playerDivs = $('.buzzers div')
+
   console.log(code)
 
-  var playerDiv = $('.buzzers div[data-keystroke="' + code + '"]')
-
+  playerDiv = $('.buzzers div[data-keystroke="' + code + '"]')
   if (playerDiv.length > 0) {
       locked = true
       window.setTimeout(function() {
@@ -33,21 +31,6 @@ $(document).keydown(function(evt) {
   }
 })
 
-j = $('.buzzers')
-body = $('#scores table tr')
-$(function() {
-  $(players).each(function(i, p) {
-    j.append(buzzDisplay.replace('thekey', codes[i]).replace('name', p).replace('noise', sounds[i]))
-    showPlayer(body, codes[i], players[i])
-
-  })
-
-  playerDivs = $('.buzzers div[data-keystroke]')
-})
-
-function update(ks, amt) {
-  console.log("update " + ks + " with " + amt)
-  var elt = $('[data-keystroke=' + ks +"] span")
-  var current = Number(elt.html())
-  elt.html(current + amt)
+function afterAdd(code, name) {
+  $('.buzzers').append(buzzDisplay.replace('thekey', code).replace('name', name).replace('noise', nextNoise()))
 }

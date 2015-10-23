@@ -1,17 +1,12 @@
-var client = new Faye.Client('http://192.168.8.188:9292/')
-//$('#foo-submit').click(function() {
-//  client.publish('/msg', $('#foo').val())
-//})
+client = new Faye.Client('http://192.168.8.188:9292/')
+
 body = $('#scores table tr')
-$(players).each(function(i, p) {
-  showPlayer(body, codes[i], p)
-})
 
-$('[data-keystroke]').each(function(i, playerDisplay) {
-  function getButton(cls, text) {
-    return "<button type='button' class='btn " + cls + "'>" + text + "</button>"
-  }
+function getButton(cls, text) {
+  return "<button type='button' class='btn " + cls + "'>" + text + "</button>"
+}
 
+function addButtons(playerDisplay) {
   var pd = $(playerDisplay)
   var k = pd.data['keystroke']
 
@@ -20,15 +15,38 @@ $('[data-keystroke]').each(function(i, playerDisplay) {
     pd.append(getButton('btn-default', "+" + inc))
     pd.append(getButton('btn-danger', "-" + inc) +'<br>')
   })
-})
+}
 
-function update(ks, amt) {
+function sendUpdate(ks, amt) {
   client.publish('/score', "update(" + ks + ", " + amt + ")")
+}
+
+function sendShowPlayer(val) {
+  //Obviously desperately insecure
+  client.publish('/score', "showPlayer('" + val + "')")
 }
 
 document.onclick = function(evt) {
   var e = evt.srcElement
   var amt = Number(e.innerText)
-  var ks = $(e).parent().data('keystroke')
-  update(ks, amt)
+  if (amt) {
+    var ks = $(e).parent().data('keystroke')
+    sendUpdate(ks, amt)
+  }
+}
+
+form = $('#addPlayerForm')
+
+form.submit(function(evt) {
+  evt.preventDefault()
+
+  val = $('#nameField').val()
+  if (val.length > 1) {
+    sendShowPlayer(val)
+  }
+})
+
+function afterAdd(code, name) {
+  var playerDisplay = $('td[data-keystroke="' + code + '"]')
+  addButtons(playerDisplay)
 }
