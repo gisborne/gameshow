@@ -18,7 +18,7 @@ function addButtons(playerDisplay) {
 }
 
 function sendUpdate(ks, amt) {
-  client.publish('/score', "update(" + ks + ", " + amt + ")")
+  client.publish('/score', "update(" + ks + ", " + (updateCount + 1)+ ", " + amt + ")")
 }
 
 function sendShowPlayer(val) {
@@ -36,7 +36,6 @@ function requestSync() {
     client.publish('/score', "receiveSync(" + updateCount + ", '" + $('#playerDisplay').html() + "'); updateCount = " + updateCount)
   }
 }
-
 
 document.onclick = function (evt) {
   var e = evt.srcElement
@@ -62,5 +61,13 @@ form.submit(function (evt) {
 $('#addPlayerModal').on('shown.bs.modal', function() {
   $(this).find('#nameField').focus()
 })
+
+//This is a not-pretty hack. When we get the sync from the buzzer page, it has no buttons. So munge the UI to add them
+function afterSync() {
+  $('hr').remove()
+  $('#playerDisplay br').remove()
+  $('#playerDisplay span.score').before('<br>')
+  $('#playerDisplay td').each(function(i, p){addButtons(p)})
+}
 
 sendRequestSync()

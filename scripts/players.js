@@ -1,6 +1,5 @@
 $.getScript()
 var client = new Faye.Client('http://192.168.8.188:9292/')
-var lastId = null
 var updateCount = 0
 
 var subscription = client.subscribe('/score', function (message) {
@@ -42,15 +41,14 @@ showPlayer = function showPlayer(name) {
   updateCount++
 }
 
-function update(ks, id, amt) {
-  if (id != lastId) {
+function update(ks, count, amt) {
+  if (count > updateCount) {
     console.log("update " + ks + " with " + amt)
     var elt = $('[data-keystroke=' + ks + "] span")
     var current = Number(elt.html())
     elt.html(current + amt)
   }
 
-  lastId = id
   updateCount++
 }
 
@@ -59,8 +57,9 @@ function sendRequestSync() {
 }
 
 function receiveSync(count, content) {
-  if (!lastId || updateCount < count) {
+  if (updateCount < count) {
     $('#playerDisplay').html(content)
+    afterSync()
   }
 }
 
@@ -74,4 +73,8 @@ function buzz() {
 
 function requestSync() {
   //do nothing -- override when needed
+}
+
+function afterSync() {
+  $('#playerDisplay hr ~ button').remove()
 }
