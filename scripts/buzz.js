@@ -10,16 +10,26 @@ function buzz(code) {
 
   playerDiv = $('.buzzers div[data-keystroke="' + code + '"]')
   if (playerDiv.length > 0) {
-    locked = true
-    window.setTimeout(function() {
-      locked = false
+      locked = true
+      window.setTimeout(function() {
+        locked = false
+        playerDivs.hide()
+      }, lockTime * 1000)
       playerDivs.hide()
-    }, lockTime * 1000)
-    playerDivs.hide()
-    playerDiv.show()
-    playerDiv.find('audio')[0].play()
-  }
+      playerDiv.show()
+      playerDiv.find('audio')[0].play()
+    }
 }
+
+function sendBuzz(code) {
+  client.publish('/score', "buzz(" + code + ")")
+}
+$(document).keydown(function(evt) {
+  var code = evt.which
+  if (! locked) {
+    sendBuzz(code)
+  }
+})
 
 function afterAdd(code, name) {
   $('.buzzers').append(buzzDisplay.replace('thekey', code).replace('name', name).replace('noise', nextNoise()))

@@ -1,5 +1,6 @@
 $.getScript()
 var client = new Faye.Client('http://192.168.8.188:9292/')
+var lastId = null
 
 var subscription = client.subscribe('/score', function(message) {
   eval(message)
@@ -38,11 +39,15 @@ showPlayer = function showPlayer(name) {
   where.data('count', Number(where.data('count')) + 1)
 }
 
-function update(ks, amt) {
-  console.log("update " + ks + " with " + amt)
-  var elt = $('[data-keystroke=' + ks +"] span")
-  var current = Number(elt.html())
-  elt.html(current + amt)
+function update(ks, id, amt) {
+  if (id != lastId) {
+    console.log("update " + ks + " with " + amt)
+    var elt = $('[data-keystroke=' + ks +"] span")
+    var current = Number(elt.html())
+    elt.html(current + amt)
+  }
+
+  lastId = id
 }
 
 afterAdd = function afterAdd(code, name) {
