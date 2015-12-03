@@ -24,3 +24,5 @@ function buzz(code) {
 function afterAdd(code, name) {
   $('.buzzers').append(buzzDisplay.replace('thekey', code).replace('name', name).replace('noise', nextNoise()))
 }
+
+sendRequestSync()

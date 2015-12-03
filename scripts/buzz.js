@@ -34,3 +34,11 @@ $(document).keydown(function(evt) {
 function afterAdd(code, name) {
   $('.buzzers').append(buzzDisplay.replace('thekey', code).replace('name', name).replace('noise', nextNoise()))
 }
+
+function requestSync() {
+  if (updateCount > 0) {
+    client.publish('/score', "receiveSync(" + updateCount + ", '" + $('#playerDisplay').html() + "'); updateCount = " + updateCount)
+  }
+}
+
+sendRequestSync()

@@ -11,14 +11,14 @@ function addButtons(playerDisplay) {
   var k = pd.data['keystroke']
 
   pd.append('<hr>')
-  $([1, 2, 5]).each(function(i, inc) {
+  $([1, 2, 5]).each(function (i, inc) {
     pd.append(getButton('btn-default', "+" + inc))
-    pd.append(getButton('btn-danger', "-" + inc) +'<br>')
+    pd.append(getButton('btn-danger', "-" + inc) + '<br>')
   })
 }
 
 function sendUpdate(ks, amt) {
-  client.publish('/score', "update(" + ks + ", " + amt + ")")
+  client.publish('/score', "update(" + ks + ", " + (updateCount + 1)+ ", " + amt + ")")
 }
 
 function sendShowPlayer(val) {
@@ -26,7 +26,18 @@ function sendShowPlayer(val) {
   client.publish('/score', "showPlayer('" + val + "')")
 }
 
-document.onclick = function(evt) {
+function afterAdd(code, name) {
+  var playerDisplay = $('td[data-keystroke="' + code + '"]')
+  addButtons(playerDisplay)
+}
+
+function requestSync() {
+  if (updateCount > 0) {
+    client.publish('/score', "receiveSync(" + updateCount + ", '" + $('#playerDisplay').html() + "'); updateCount = " + updateCount)
+  }
+}
+
+document.onclick = function (evt) {
   var e = evt.srcElement
   var amt = Number(e.innerText)
   if (amt) {
@@ -37,7 +48,7 @@ document.onclick = function(evt) {
 
 form = $('#addPlayerForm')
 
-form.submit(function(evt) {
+form.submit(function (evt) {
   evt.preventDefault()
 
   val = $('#nameField').val()
@@ -46,7 +57,17 @@ form.submit(function(evt) {
   }
 })
 
-function afterAdd(code, name) {
-  var playerDisplay = $('td[data-keystroke="' + code + '"]')
-  addButtons(playerDisplay)
+
+$('#addPlayerModal').on('shown.bs.modal', function() {
+  $(this).find('#nameField').focus()
+})
+
+//This is a not-pretty hack. When we get the sync from the buzzer page, it has no buttons. So munge the UI to add them
+function afterSync() {
+  $('hr').remove()
+  $('#playerDisplay br').remove()
+  $('#playerDisplay span.score').before('<br>')
+  $('#playerDisplay td').each(function(i, p){addButtons(p)})
 }
+
+sendRequestSync()
