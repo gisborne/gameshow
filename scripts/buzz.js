@@ -37,7 +37,7 @@ function afterAdd(code, name) {
 
 function requestSync() {
   if (updateCount > 0) {
-    client.publish('/score', "receiveSync(" + updateCount + ", '" + $('#playerDisplay').html() + "'); updateCount = " + updateCount)
+    client.publish('/score', "receiveSync(" + updateCount + ", '" + $('#playerDisplay').html() + "', '" + $($('.buzzers')[0]).html().trim() + "'); updateCount = " + updateCount)
   }
 }
 

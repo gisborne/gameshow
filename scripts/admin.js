@@ -1,6 +1,7 @@
-client = new Faye.Client('http://192.168.8.188:9292/')
+client = new Faye.Client('http://192.168.8.165:9292/')
 
 body = $('#scores table tr')
+buzzDisplay = '<div data-keystroke="thekey"><h1>name</h1><audio src="/media/noise"></audio></div>'
 
 function getButton(cls, text) {
   return "<button type='button' class='btn " + cls + "'>" + text + "</button>"
@@ -26,14 +27,20 @@ function sendShowPlayer(val) {
   client.publish('/score', "showPlayer('" + val + "')")
 }
 
+function sendClear() {
+  client.publish('/score', "receiveClear()")
+}
+
 function afterAdd(code, name) {
   var playerDisplay = $('td[data-keystroke="' + code + '"]')
   addButtons(playerDisplay)
+  $('.buzzers').append(buzzDisplay.replace('thekey', code).replace('name', name).replace('noise', nextNoise()))
 }
 
 function requestSync() {
   if (updateCount > 0) {
-    client.publish('/score', "receiveSync(" + updateCount + ", '" + $('#playerDisplay').html() + "'); updateCount = " + updateCount)
+    //No idea why we get an extraneous return at the beginning of the second string, or why that should cause a problem, but it do
+    client.publish('/score', "receiveSync(" + updateCount + ", '" + $('#playerDisplay').html() + "', '" + $($('.buzzers')[0]).html().trim() + "'); updateCount = " + updateCount)
   }
 }
 

@@ -1,8 +1,8 @@
-$.getScript()
-var client = new Faye.Client('http://192.168.8.188:9292/')
+var client = new Faye.Client('http://192.168.8.165:9292/')
 var updateCount = 0
 
 var subscription = client.subscribe('/score', function (message) {
+  console.log(message)
   eval(message)
 })
 
@@ -31,7 +31,7 @@ function nextNoise() {
 
 playerDisplay = '<td data-keystroke="thekey">name<br><span class="score">0</span></td>'
 
-showPlayer = function showPlayer(name) {
+function showPlayer(name) {
   where = $('#playerDisplay')
   code = nextCode()
   where.append(playerDisplay.replace('thekey', code).replace('name', name))
@@ -56,11 +56,16 @@ function sendRequestSync() {
   client.publish('/score', 'requestSync()')
 }
 
-function receiveSync(count, content) {
+function receiveSync(count, content, buzzContent) {
   if (updateCount < count) {
     $('#playerDisplay').html(content)
+    $('.buzzers').html(buzzContent)
     afterSync()
   }
+}
+
+function receiveClear() {
+  $('#playerDisplay').empty()
 }
 
 function afterAdd(code, name) {
@@ -76,5 +81,5 @@ function requestSync() {
 }
 
 function afterSync() {
-  $('#playerDisplay hr ~ button').remove()
+  $('button').remove()
 }

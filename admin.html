@@ -5,7 +5,7 @@
     <meta name="description" content="Game Show Buzzer and Score Admin">
     <meta name="author" content="Guyren G Howe">
     <title>Game Slime Admin</title>
-    <script src="http://192.168.8.188:9292/msg/client.js"></script>
+    <script src="http://192.168.8.165:9292/msg/client.js"></script>
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="scripts/players.js"></script>
@@ -28,7 +28,10 @@
             </table>
         </div>
         <button class="btn btn-primary glyphicon glyphicon-plus" id="addPlayerBtn" data-toggle="modal" data-target="#addPlayerModal"></button>
+        <button class="btn glyphicon glyphicon-remove" id="addPlayerBtn" data-toggle="modal" data-target="#addPlayerModal" onclick="sendClear()"></button>
     </div>
+</div>
+<div class="row buzzers">
 </div>
 <div class="modal fade" id="addPlayerModal" tabindex="-1" role="dialog">
     <div class="modal-dialog">
